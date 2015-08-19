@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="myApp1">
+    <head>
+        <title>Day 3 Sample Project</title>
+        <link rel="stylesheet" href="css/bootstrap.css" />
+        <script src="js/angular.min.js"></script>
+        <script src="js/angular-resource.js"></script>
+        <script src="js/directives/myDirective.js"></script>
+    </head>
+
+    <body>
+
+        <script>
+            var m = angular.module("myApp1", ['ngResource']);
+            m.controller("myController", function ($scope, $http) {
+                $http.get("http://localhost:2403/products").success(function (data) {
+                    $scope.details = data;
+                }).error(function (data, status) {
+                    console.error("error");
+                });
+            });
+            m.controller("resourceController", function ($scope, $resource) {
+
+                var productResource = $resource("http://localhost:2403/products");
+                $scope.resourceData = productResource.query();
+            });
+        </script>
+
+        <h3> Server Communication Project {{1}}</h3>
+        <br>
+        <br>
+        <div ng-controller="myController">
+            <h4> Using <b>"$http"</b> methods </h4>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                </tr>
+                <tr ng-repeat="d in details">
+                    <td>{{d.code}}</td>
+                    <td>{{d.name}}</td>
+                    <td>{{d.price}}</td>
+                    <td>{{d.description}}</td>
+                </tr>
+            </table>
+        </div>
+        <div ng-controller="resourceController">
+            <h4> Using <b>"$resource"</b> methods </h4>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                </tr>
+                <tr ng-repeat="d in resourceData">
+                    <td>{{d.code}}</td>
+                    <td>{{d.name}}</td>
+                    <td>{{d.price}}</td>
+                    <td>{{d.description}}</td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>
